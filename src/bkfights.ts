@@ -49,6 +49,7 @@ import {
   chatPrivate,
   wait,
   abort,
+  toUrl,
 } from 'kolmafia';
 import {
   $class,
@@ -73,6 +74,8 @@ import {
   property,
   $familiars,
   $effects,
+  questStep,
+  Kmail,
 } from 'libram';
 import { getString } from 'libram/dist/property';
 import { fillAsdonMartinTo } from './asdon';
@@ -279,7 +282,7 @@ function refreshComma() {
   if (myFamiliar() === $familiar`Comma Chameleon`) {
     visitUrl('charpane.php');
     cliExecute('refresh inv');
-    if (get('commaFamiliar') !== 'Feather Boa Constrictor') {
+    if (get('commaFamiliar') !== $familiar`Feather Boa Constrictor`) {
       assert(have($item`velvet choker`), 'Must have a velvet choker to refresh your comma chameleon!');
       // borrowed from phyllis
       visitUrl('charpane.php');
@@ -944,14 +947,25 @@ step(
   'never-ending party',
   () => get('_neverendingPartyFreeTurns') < 10,
   () =>
-    setChoices(
-      new Map([
-        [1322, 2],
-        [1324, 5],
-      ])
-    )
-)(() => {
+    {
+      if (get("_questPartyFair") === "unstarted") {
+        visitUrl(toUrl($location`The Neverending Party`));
+        if (get("_questPartyFairQuest") === "food") {
+          runChoice(1);
+          setChoices(new Map<number, number>([[1324, 2], [1326, 3]]));
+        } else if (get("_questPartyFairQuest") === "booze") {
+          runChoice(1);
+          setChoices(new Map<number, number>([[1324, 3], [1327, 3]]));
+        } else { setChoice(1324, 5)}
+      }
+    },
+    () => {
   adventureMacro($location`The Neverending Party`, Macro.tentacle().spellKill());
+  if (questStep("_questPartyFair") >= 1 && get("choiceAdventure1324") !== 5) {
+    setChoice(1324, 5);
+    const partyFairInfo = get("_questPartyFairProgress").split(" ");
+    Kmail.send("Captain Scotch", `Gerald/ine wants ${partyFairInfo[0]} ${toItem(partyFairInfo[1]).plural}. Hope that's exciting!`)
+  }
 });
 
 step(
