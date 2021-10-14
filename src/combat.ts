@@ -33,7 +33,6 @@ import {
   $monster,
   $skill,
   Macro as LibramMacro,
-  banishedMonsters,
   get as getLibram,
   get,
   $familiars,

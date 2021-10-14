@@ -74,8 +74,8 @@ import {
   property,
   $familiars,
   $effects,
-  questStep,
   Kmail,
+  questStep,
 } from 'libram';
 import { getString } from 'libram/dist/property';
 import { fillAsdonMartinTo } from './asdon';
@@ -331,7 +331,7 @@ function freeFight(macro: Macro) {
       if (!have(ticket)) buy(1, ticket, 1000000);
       use(ticket);
     }
-    withMacro(Macro.tentacle().step(macro).abort(), () => adv1($location`Toxic Teacups`, 1, '');
+    withMacro(Macro.tentacle().step(macro).abort(), () => adv1($location`Toxic Teacups`, 1, ''))  
   }
 }
 
@@ -961,25 +961,25 @@ step(
 step(
   'never-ending party',
   () => get('_neverendingPartyFreeTurns') < 10,
-  () =>
-    {
-      if (get("_questPartyFair") === "unstarted") {
-        visitUrl(toUrl($location`The Neverending Party`));
-        if (get("_questPartyFairQuest") === "food") {
-          runChoice(1);
-          setChoices(new Map<number, number>([[1324, 2], [1326, 3]]));
-        } else if (get("_questPartyFairQuest") === "booze") {
-          runChoice(1);
-          setChoices(new Map<number, number>([[1324, 3], [1327, 3]]));
-        } else { setChoice(1324, 5)}
-      }
-    },
-    () => {
+  () =>    
+  {
+    if (get("_questPartyFair") === "unstarted") {
+      visitUrl(toUrl($location`The Neverending Party`));
+      if (get("_questPartyFairQuest") === "food") {
+        runChoice(1);
+        setChoices(new Map<number, number>([[1324, 2], [1326, 3]]));
+      } else if (get("_questPartyFairQuest") === "booze") {
+        runChoice(1);
+        setChoices(new Map<number, number>([[1324, 3], [1327, 3]]));
+      } else { setChoice(1324, 5)}
+    }
+  },
+  () => {
   adventureMacro($location`The Neverending Party`, Macro.tentacle().spellKill());
   if (questStep("_questPartyFair") >= 1 && get("choiceAdventure1324") !== 5) {
     setChoice(1324, 5);
     const partyFairInfo = get("_questPartyFairProgress").split(" ");
-    Kmail.send("Captain Scotch", `Gerald/ine wants ${partyFairInfo[0]} ${toItem(partyFairInfo[1]).plural}. Hope that's exciting!`)
+    Kmail.send("worthawholebean", `Gerald/ine wants ${partyFairInfo[0]} ${toItem(partyFairInfo[1]).plural}. Hope that's exciting!`)
   }
 });
 
