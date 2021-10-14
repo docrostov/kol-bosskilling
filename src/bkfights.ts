@@ -75,6 +75,7 @@ import {
   $familiars,
   $effects,
   questStep,
+  Kmail,
 } from 'libram';
 import { getString } from 'libram/dist/property';
 import { fillAsdonMartinTo } from './asdon';
@@ -962,6 +963,8 @@ step(
   adventureMacro($location`The Neverending Party`, Macro.tentacle().spellKill());
   if (questStep("_questPartyFair") >= 1 && get("choiceAdventure1324") !== 5) {
     setChoice(1324, 5);
+    const partyFairInfo = get("_questPartyFairProgress").split(" ");
+    Kmail.send("Captain Scotch", `Gerald/ine wants ${partyFairInfo[0]} ${toItem(partyFairInfo[1]).plural}. Hope that's exciting!`)
   }
 });
 
