@@ -49,6 +49,7 @@ import {
   chatPrivate,
   wait,
   abort,
+  toUrl,
 } from 'kolmafia';
 import {
   $class,
@@ -73,6 +74,7 @@ import {
   property,
   $familiars,
   $effects,
+  questStep,
 } from 'libram';
 import { getString } from 'libram/dist/property';
 import { fillAsdonMartinTo } from './asdon';
@@ -944,14 +946,23 @@ step(
   'never-ending party',
   () => get('_neverendingPartyFreeTurns') < 10,
   () =>
-    setChoices(
-      new Map([
-        [1322, 2],
-        [1324, 5],
-      ])
-    )
-)(() => {
+    {
+      if (get("_questPartyFair") === "unstarted") {
+        visitUrl(toUrl($location`The Neverending Party`));
+        if (get("_questPartyFairQuest") === "food") {
+          runChoice(1);
+          setChoices(new Map<number, number>([[1324, 2], [1326, 3]]));
+        } else if (get("_questPartyFairQuest") === "booze") {
+          runChoice(1);
+          setChoices(new Map<number, number>([[1324, 3], [1327, 3]]));
+        } else { setChoice(1324, 5)}
+      }
+    },
+    () => {
   adventureMacro($location`The Neverending Party`, Macro.tentacle().spellKill());
+  if (questStep("_questPartyFair") >= 1 && get("choiceAdventure1324") !== 5) {
+    setChoice(1324, 5);
+  }
 });
 
 step(
