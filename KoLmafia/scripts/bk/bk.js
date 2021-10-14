@@ -22621,7 +22621,7 @@ function simulateFamiliar(chanceOfAct, chanceOfMeat, chanceOfDamage, meat, damag
   var meatDoubleChance = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
   var mlDamageResistance = Math.min(0.5, 0.04 * (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.numericModifier)('Monster Level'));
   var maxHp = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.numericModifier)('Monster Level') + 200;
-  var maxTrials = 100000;
+  var maxTrials = 5;
   var trials = 0;
   var totalMeat = 0;
 

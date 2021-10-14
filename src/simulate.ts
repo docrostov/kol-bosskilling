@@ -18,7 +18,7 @@ function simulateFamiliar(
   let mlDamageResistance = Math.min(0.5, 0.04 * numericModifier('Monster Level'));
 
   let maxHp = numericModifier('Monster Level') + 200;
-  let maxTrials = 100000;
+  let maxTrials = 1;
   let trials = 0;
   let totalMeat = 0;
 
