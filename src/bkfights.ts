@@ -141,7 +141,7 @@ function maybeEnthrone(f: Familiar) {
 }
 function heavyRainFreeFights() {
   while (myLightning() >= 20) {
-    drumMachineWithMacro(Macro.skill($skill`lightning strike`));
+    freeFight(Macro.skill($skill`lightning strike`));
   }
   while (myRain() >= 50) {
     setPropertyMafia('choiceAdventure970', `1&whichmonster=${FREE_FIGHT_COPY_TARGET.id}`);
@@ -315,6 +315,21 @@ function isMeatFamiliar() {
 
 function drumMachineWithMacro(macro: Macro) {
   withMacro(Macro.tentacle().step(macro).abort(), () => use($item`drum machine`));
+}
+
+function freeFight(macro: Macro) {
+  // If you don't have melanges, go get a melange.
+  if (!have($item`spice melange`)) {
+    drumMachineWithMacro(macro);
+  } else {
+    // Otherwise, go get more turns of Toxic Vengeance. 
+    if (!(get("stenchAirportAlways") || get("_stenchAirportToday"))) {
+      const ticket = $item`one-day ticket to Dinseylandfill`;
+      if (!have(ticket)) buy(1, ticket, 1000000);
+      use(ticket);
+    }
+    withMacro(Macro.tentacle().step(macro).abort(), () => adv1($location`Toxic Teacups`, 1, '');
+  }
 }
 
 class SpookyPutty {
@@ -879,7 +894,7 @@ step(
     buy(100, $item`Superduperheated Metal`, freeFightCost(true, true, true));
   }
 )(() => {
-  drumMachineWithMacro(FreeKill.maybeMacro());
+  freeFight(FreeKill.maybeMacro());
   heavyRainFreeFights();
 });
 
@@ -894,7 +909,7 @@ step(
 )(() => {
   Battery.setupFreeKill();
   assert(get('shockingLickCharges') > 0, 'Must have a lick charge!!');
-  drumMachineWithMacro(Macro.skill($skill`Shocking Lick`));
+  freeFight(Macro.skill($skill`Shocking Lick`));
   heavyRainFreeFights();
 });
 
@@ -906,7 +921,7 @@ step(
     pickFreeFightFamiliar();
   }
 )(() => {
-  drumMachineWithMacro(Macro.trySkill($skill`Fire the Jokester's Gun`));
+  freeFight(Macro.trySkill($skill`Fire the Jokester's Gun`));
 });
 
 step(
@@ -917,7 +932,7 @@ step(
     pickFreeFightFamiliar();
   }
 )(() => {
-  drumMachineWithMacro(Macro.trySkill($skill`Chest X-Ray`));
+  freeFight(Macro.trySkill($skill`Chest X-Ray`));
 });
 
 step(
@@ -926,7 +941,7 @@ step(
   () => pickFreeFightFamiliar(),
   () => getItem(5 - get('_powderedMadnessUses'), $item`powdered madness`, freeFightCost(true, true))
 )(() => {
-  drumMachineWithMacro(Macro.item($item`powdered madness`));
+  freeFight(Macro.item($item`powdered madness`));
 });
 
 step(
@@ -937,7 +952,7 @@ step(
     pickFreeFightFamiliar();
   }
 )(() => {
-  drumMachineWithMacro(Macro.skill($skill`Asdon Martin: Missile Launcher`));
+  freeFight(Macro.skill($skill`Asdon Martin: Missile Launcher`));
 });
 
 step(
@@ -1012,7 +1027,7 @@ step(
     }
   }
 )(() => {
-  drumMachineWithMacro(Macro.item($item`power pill`));
+  freeFight(Macro.item($item`power pill`));
 });
 
 step(
@@ -1125,7 +1140,7 @@ step(
     fillAsdonMartinTo(100);
   }
 )(() => {
-  drumMachineWithMacro(Macro.skill($skill`Asdon Martin: Missile Launcher`));
+  freeFight(Macro.skill($skill`Asdon Martin: Missile Launcher`));
 });
 
 function setupRobort() {

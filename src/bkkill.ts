@@ -138,7 +138,10 @@ export function status(location: Location) {
   return HoboStatus.Unavailable;
 }
 
-function bestItemFamiliar() {
+function bestItemFamiliar(bossToKill: Monster) {
+  if (bossToKill == $monster`Oscus`){
+    return $familiar`Vampire Vintner`;
+  }
   if (have($familiar`Steam-powered Cheerleader`) && get('_cheerleaderSteam') > 100) {
     return $familiar`Steam-powered Cheerleader`;
   }
@@ -153,7 +156,7 @@ function turnSafe(name: string, condition: () => boolean, block: () => void) {
   }
 }
 
-function setupOutfit() {
+function setupOutfit(bossToKill: Monster) {
   if (toItem(get('bk.weapon')) == $item`scratch 'n' sniff sword`) {
     // refresh the sticker weapon
     retrieveItem(3, $item`scratch 'n' sniff unicorn sticker`);
@@ -167,12 +170,12 @@ function setupOutfit() {
     retrieveItem(1, $item`box of familiar jacks`);
     use($item`box of familiar jacks`);
   }
-  if (!get('_feastedFamiliars').includes(`${bestItemFamiliar()}`)) {
-    useFamiliar(bestItemFamiliar());
+  if (!get('_feastedFamiliars').includes(`${bestItemFamiliar(bossToKill)}`)) {
+    useFamiliar(bestItemFamiliar(bossToKill));
     withStash([$item`moveable feast`], () => use($item`moveable feast`));
   }
-  if (!get('_mummeryMods').includes(`${bestItemFamiliar()}`) && !get('_mummeryMods').includes('Item Drop:')) {
-    useFamiliar(bestItemFamiliar());
+  if (!get('_mummeryMods').includes(`${bestItemFamiliar(bossToKill)}`) && !get('_mummeryMods').includes('Item Drop:')) {
+    useFamiliar(bestItemFamiliar(bossToKill));
     cliExecute('mummery item');
   }
   if (get('_VYKEACompanionType') === '') {
@@ -199,8 +202,8 @@ function outfit() {
 function kill(location: Location) {
   let hoboLocation = hoboLocations.get(location);
   if (hoboLocation) {
-    let itemFamiliar = bestItemFamiliar();
-    setupOutfit();
+    let itemFamiliar = bestItemFamiliar(hoboLocation.boss);
+    setupOutfit(hoboLocation.boss);
     useFamiliar(itemFamiliar);
     outfit();
     let otoscopeBoss = toMonster(get('otoscopeBoss'));
@@ -259,8 +262,8 @@ export function main(args: string) {
     skills.forEach(i => print(`${i}: ${availableAmount(i)}`));
   }
   if (args.trim() == 'outfit') {
-    setupOutfit();
-    useFamiliar(bestItemFamiliar());
+    setupOutfit($monster`Chester`);
+    useFamiliar(bestItemFamiliar($monster`Chester`));
     outfit();
 
     let softshoes = 30 * 2; // doubled by squint
@@ -333,5 +336,6 @@ export function main(args: string) {
       dropsMap.set(Item.get(itemStr), obj[itemStr!]);
     }
     sendKmail(player, 'Hobopolis consumable drops', dropsMap);
+    myAdventures
   }
 }
