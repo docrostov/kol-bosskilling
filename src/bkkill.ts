@@ -133,7 +133,7 @@ export function status(location: Location) {
 }
 
 function bestItemFamiliar(bossToKill: Monster) {
-  if (bossToKill == $monster`Oscus`){
+  if (bossToKill == $monster`Oscus`) {
     return $familiar`Vampire Vintner`;
   }
   if (have($familiar`Steam-powered Cheerleader`) && get('_cheerleaderSteam') > 100) {
@@ -247,7 +247,7 @@ export function main(args: string) {
   args ||= 'status';
   if (args.trim() == 'status') {
     print(`In clan ${Clan.get().name}`);
-    for (let key of Array.from(hoboLocations.keys())) {
+    for (let key of hoboLocations.keys()) {
       printStatus(key);
     }
   }
@@ -283,7 +283,7 @@ export function main(args: string) {
     consumables.forEach(i => drops.set(i, availableAmount(i)));
     skills.forEach(i => drops.set(i, availableAmount(i)));
 
-    for (let key of Array.from(hoboLocations.keys())) {
+    for (let key of hoboLocations.keys()) {
       let lookup = hoboLocations.get(key);
 
       if (lookup && status(key) == HoboStatus.BossReady) {
@@ -330,6 +330,6 @@ export function main(args: string) {
       dropsMap.set(Item.get(itemStr), obj[itemStr!]);
     }
     sendKmail(player, 'Hobopolis consumable drops', dropsMap);
-    myAdventures
+    myAdventures;
   }
 }

@@ -1,7 +1,6 @@
 import {
   autosellPrice,
   availableAmount,
-  buy,
   cliExecute,
   equip,
   getInventory,
@@ -11,19 +10,16 @@ import {
   printHtml,
   putShop,
   takeShop,
-  toInt,
   toItem,
-  visitUrl,
 } from 'kolmafia';
-import { freeFightCost, main as fightMain, pickFreeFightFamiliar } from './bkfights';
+import { main as fightMain, pickFreeFightFamiliar } from './bkfights';
 import { main as killMain } from './bkkill';
 import { main as wlMain } from './wl';
 import { main as sewerMain } from './sewers';
 import { main as dailyMain } from './bkdaily';
 import { main as dietMain } from './bkdiet';
 import { buffsBelowThreshold, sendKmail, Table, time } from './lib';
-import { get, set, property, $item, have } from 'libram';
-import { simulateFamiliarMeat } from './simulate';
+import { get, set, property, $item } from 'libram';
 
 function help() {
   print('bk [mode] [mode args]');
@@ -241,32 +237,11 @@ export function main(args: string) {
             }
             break;
           case 'freefight':
-            let perFight = simulateFamiliarMeat();
-            print(`Melange Price: ${property.getNumber('simulationMelangePrice')}`);
-            print(`Drum Machine Cost: ${property.getNumber('simulationDrumMachineCost')}`);
-            print(`Simulation Safety Threshold: ${property.getNumber('simulationSafetyThreshold')}`);
-            print(`Free Fight Values (${perFight}):`);
-            print('Using Current Familiar', 'Blue');
-            print(`Current Familiar Choice: ${pickFreeFightFamiliar(true)}`);
-            print(`Drum Machine, Choose Familiar: ${freeFightCost(true, true)}`);
-            print(`(Single Battery): ${freeFightCost(true, true) / 4}`);
-            print(`Drum Machine, Do not Choose: ${freeFightCost(true, false)}`);
-            print(`No Drum Machine, Choose Familiar: ${freeFightCost(false, true)}`);
-            print(`No Drum Machine, Do not Choose: ${freeFightCost(false, false)}`);
-            print('Using Meat Familiar Override');
-            print(`Current Familiar Choice (meat familiar): ${pickFreeFightFamiliar(true, true)}`);
-            print(`Drum Machine, Choose Familiar (meat familiar): ${freeFightCost(true, true, true)}`);
-            print(`(Single Battery): ${freeFightCost(true, true, true) / 4}`);
-            print(`Drum Machine, Do not Choose (meat familiar): ${freeFightCost(true, false, true)}`);
-            print(`No Drum Machine, Choose Familiar (meat familiar): ${freeFightCost(false, true, true)}`);
-            print(`No Drum Machine, Do not Choose (meat familiar): ${freeFightCost(false, false, true)}`);
 
             if (modeArgs.includes('update')) {
-              let batteryPrice = Math.floor(freeFightCost(true, true, true) / 4);
-              print(`Updating battery price @ ${batteryPrice}`, 'red');
               takeShop($item`Battery (AAA)`);
               cliExecute('refresh inventory');
-              putShop(batteryPrice, 1, Math.min(5, availableAmount($item`Battery (AAA)`)), $item`Battery (AAA)`);
+              putShop(2500, 1, Math.min(5, availableAmount($item`Battery (AAA)`)), $item`Battery (AAA)`);
             }
 
             break;

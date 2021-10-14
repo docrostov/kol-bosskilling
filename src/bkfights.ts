@@ -2,7 +2,6 @@ import {
   availableAmount,
   cliExecute,
   equip,
-  faxbot,
   getCampground,
   getCounters,
   handlingChoice,
@@ -29,30 +28,21 @@ import {
   weightAdjustment,
   equippedAmount,
   equippedItem,
-  eat,
-  effectModifier,
   toItem,
   myFamiliar,
-  toMonster,
-  toFamiliar,
   availableChoiceOptions,
   buy,
   totalTurnsPlayed,
   maximize,
-  myClass,
   drink,
-  mySpleenUse,
   myAdventures,
   craft,
-  numericModifier,
-  random,
   chatPrivate,
   wait,
   abort,
   toUrl,
 } from 'kolmafia';
 import {
-  $class,
   $effect,
   $familiar,
   $item,
@@ -65,12 +55,9 @@ import {
   have,
   set,
   TunnelOfLove,
-  Witchess,
-  getRemainingStomach,
   getRemainingLiver,
   $items,
   $slots,
-  getRemainingSpleen,
   property,
   $familiars,
   $effects,
@@ -81,14 +68,7 @@ import { getString } from 'libram/dist/property';
 import { fillAsdonMartinTo } from './asdon';
 import { adventureMacro, Macro, withMacro } from './combat';
 import { getItem, inClan, log, LogLevel, minimumRelevantBuff, setChoice, setChoices, assert, withStash } from './lib';
-import { simulateFamiliarMeat } from './simulate';
 
-const FREE_STASIS_FAMILIAR = property.getFamiliar('freeStasisFamiliar', $familiar`Cocoabo`)!;
-
-const MELANGE_VALUE = property.getNumber('simulationMelangePrice');
-const DRUM_MACHINE_COST = property.getNumber('simulationDrumMachineCost');
-const FREE_FIGHT_SAFETY_THRESHOLD = property.getNumber('simulationSafetyThreshold');
-const STASIS_FIGHT_VALUE = simulateFamiliarMeat();
 const FREE_FIGHT_COPY_TARGET = property.getMonster('freeCopyFight', $monster`Witchess Bishop`)!;
 const MINIMUM_BUFF_TURNS = property.getNumber('freeBuffThreshold');
 const INFINITE_LOOP_COUNT = property.getNumber('infiniteLoopCount');
@@ -116,19 +96,6 @@ function faxMonster(monster: Monster): void {
     }
     abort(`Failed to acquire photocopied ${monster.name}.`);
   }
-}
-
-export function freeFightCost(useDrumMachine: boolean, pickFamiliar: boolean, overrideFamiliar: boolean = false) {
-  // TODO: compute marginal MPA of accessories
-  let familiarFightValue = 0;
-  if (pickFamiliar && (overrideFamiliar || pickFreeFightFamiliar(true) === FREE_STASIS_FAMILIAR)) {
-    familiarFightValue = STASIS_FIGHT_VALUE * 2;
-  }
-  let singleFreeFightCost =
-    familiarFightValue + (useDrumMachine ? MELANGE_VALUE * 0.1 - DRUM_MACHINE_COST : 0) + 1000 * 2 + 200;
-  return Math.floor(
-    FREE_FIGHT_SAFETY_THRESHOLD * Math.min(600000, singleFreeFightCost + 3000 * 0.04 + singleFreeFightCost * 0.1)
-  );
 }
 
 function maybeBjorn(f: Familiar) {
@@ -295,21 +262,7 @@ function refreshComma() {
 }
 
 export function pickFreeFightFamiliar(simulate: boolean = false, overrideFamiliar: boolean = false) {
-  let [minEffect, minTurns] = minimumRelevantBuff();
-
-  if ((MINIMUM_BUFF_TURNS != -1 && minTurns >= MINIMUM_BUFF_TURNS) || overrideFamiliar) {
-    let freeFightFamiliar = FREE_STASIS_FAMILIAR;
-    if (!simulate) {
-      useFamiliar(freeFightFamiliar);
-      refreshComma();
-    }
-    return freeFightFamiliar;
-  } else {
-    if (!simulate) {
-      useFamiliar($familiar`Unspeakachu`);
-    }
     return $familiar`Unspeakachu`;
-  }
 }
 
 function isMeatFamiliar() {
@@ -487,7 +440,7 @@ class Battery {
   static buy() {
     $items`Battery (AAA),Battery (AA),Battery (D),Battery (9-Volt),Battery (Lantern),Battery (Car)`.forEach(
       (battery, index) => {
-        let cost = (freeFightCost(true, true, true) * (index + 1)) / 4;
+        let cost = (10000 * (index + 1)) / 4;
         debug(`Buying ${battery} @ ${cost}`);
         print(`Buying ${battery} @ ${cost}`);
         buy(10000, battery, Math.ceil(cost));
@@ -868,7 +821,7 @@ step(
 step(
   'glark cables',
   () => ['step3', 'finished'].includes(get('questL11Ron')) && get('_glarkCableUses') < 5,
-  () => getItem(5 - get('_glarkCableUses'), $item`glark cable`, freeFightCost(false, true))
+  () => getItem(5 - get('_glarkCableUses'), $item`glark cable`, 10000)
 )(() => {
   adventureMacro($location`The Red Zeppelin`, Macro.tentacle().item($item`glark cable`));
 });
@@ -893,8 +846,8 @@ step(
   () => FreeKill.hasFreeKills(),
   () => pickFreeFightFamiliar(),
   () => {
-    buy(100, $item`Daily Affirmation: Think Win-Lose`, freeFightCost(true, true, true));
-    buy(100, $item`Superduperheated Metal`, freeFightCost(true, true, true));
+    buy(100, $item`Daily Affirmation: Think Win-Lose`, 10000);
+    buy(100, $item`Superduperheated Metal`, 10000);
   }
 )(() => {
   freeFight(FreeKill.maybeMacro());
@@ -940,9 +893,9 @@ step(
 
 step(
   'powdered madness',
-  () => get('_powderedMadnessUses') < 5 && mallPrice($item`powdered madness`) < freeFightCost(true, true),
+  () => get('_powderedMadnessUses') < 5 && mallPrice($item`powdered madness`) < 10000,
   () => pickFreeFightFamiliar(),
-  () => getItem(5 - get('_powderedMadnessUses'), $item`powdered madness`, freeFightCost(true, true))
+  () => getItem(5 - get('_powderedMadnessUses'), $item`powdered madness`, 10000)
 )(() => {
   freeFight(Macro.item($item`powdered madness`));
 });
@@ -1036,7 +989,7 @@ step(
       getItem(
         Math.max(0, 20 - get('_powerPillUses') - availableAmount($item`power pill`)),
         $item`power pill`,
-        freeFightCost(true, false)
+        10000
       );
     }
   }

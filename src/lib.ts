@@ -5,11 +5,8 @@ import {
   cliExecute,
   closetAmount,
   eat,
-  effectModifier,
   familiarWeight,
   formatDateTime,
-  gamedayToInt,
-  gametimeToInt,
   getCampground,
   getClanName,
   getProperty,
@@ -19,7 +16,6 @@ import {
   mallPrice,
   myAdventures,
   myClass,
-  myEffectiveFamiliar,
   myEffects,
   myFamiliar,
   myLocation,
@@ -51,7 +47,7 @@ import {
   weightAdjustment,
 } from 'kolmafia';
 import { $class, $effect, $effects, $item, $items, $location, $skill, $thrall, get, have } from 'libram';
-import { getSewersState, throughSewers } from './sewers';
+import { throughSewers } from './sewers';
 import { setClan } from './wl';
 
 export enum LogLevel {
@@ -246,6 +242,7 @@ export function myFamiliarWeight(familiar: Familiar | null = null) {
 export function lastWasCombat() {
   return !myLocation().noncombatQueue.includes(getProperty('lastEncounter'));
 }
+
 
 export function unclosetNickels() {
   for (const item of $items`hobo nickel, sand dollar`) {
