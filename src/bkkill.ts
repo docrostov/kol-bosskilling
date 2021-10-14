@@ -1,25 +1,19 @@
 import {
   availableAmount,
-  buy,
   cliExecute,
   equip,
-  getClanName,
-  haveEffect,
   myAdventures,
   numericModifier,
   print,
   printHtml,
   retrieveItem,
-  setProperty,
   toItem,
   toMonster,
   use,
   useFamiliar,
-  useSkill,
   visitUrl,
 } from 'kolmafia';
 import {
-  $effect,
   $familiar,
   $item,
   $items,
@@ -253,7 +247,7 @@ export function main(args: string) {
   args ||= 'status';
   if (args.trim() == 'status') {
     print(`In clan ${Clan.get().name}`);
-    for (let key of hoboLocations.keys()) {
+    for (let key of Array.from(hoboLocations.keys())) {
       printStatus(key);
     }
   }
@@ -289,7 +283,7 @@ export function main(args: string) {
     consumables.forEach(i => drops.set(i, availableAmount(i)));
     skills.forEach(i => drops.set(i, availableAmount(i)));
 
-    for (let key of hoboLocations.keys()) {
+    for (let key of Array.from(hoboLocations.keys())) {
       let lookup = hoboLocations.get(key);
 
       if (lookup && status(key) == HoboStatus.BossReady) {
