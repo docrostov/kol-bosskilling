@@ -279,7 +279,7 @@ function refreshComma() {
   if (myFamiliar() === $familiar`Comma Chameleon`) {
     visitUrl('charpane.php');
     cliExecute('refresh inv');
-    if (get('commaFamiliar') !== 'Feather Boa Constrictor') {
+    if (get('commaFamiliar') !== $familiar`Feather Boa Constrictor`) {
       assert(have($item`velvet choker`), 'Must have a velvet choker to refresh your comma chameleon!');
       // borrowed from phyllis
       visitUrl('charpane.php');
