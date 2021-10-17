@@ -1,15 +1,11 @@
 import {
   availableAmount,
   buy,
-  buyPrice,
   cliExecute,
-  craft,
   getCampground,
-  handlingChoice,
   mallPrice,
   maximize,
   myMeat,
-  print,
   retrieveItem,
   reverseNumberology,
   runChoice,
@@ -22,7 +18,6 @@ import {
   visitUrl,
 } from 'kolmafia';
 import { $coinmasters, $item, $skill, get, have, property } from 'libram';
-import { castArray } from 'lodash-es';
 import { inClan, LogLevel, setChoice, withStash, log } from './lib';
 
 let tasks = new Array<() => void>();

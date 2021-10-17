@@ -1,25 +1,19 @@
 import {
   availableAmount,
-  buy,
   cliExecute,
   equip,
-  getClanName,
-  haveEffect,
   myAdventures,
   numericModifier,
   print,
   printHtml,
   retrieveItem,
-  setProperty,
   toItem,
   toMonster,
   use,
   useFamiliar,
-  useSkill,
   visitUrl,
 } from 'kolmafia';
 import {
-  $effect,
   $familiar,
   $item,
   $items,
@@ -139,7 +133,7 @@ export function status(location: Location) {
 }
 
 function bestItemFamiliar(bossToKill: Monster) {
-  if (bossToKill == $monster`Oscus`){
+  if (bossToKill == $monster`Oscus`) {
     return $familiar`Vampire Vintner`;
   }
   if (have($familiar`Steam-powered Cheerleader`) && get('_cheerleaderSteam') > 100) {
@@ -336,6 +330,6 @@ export function main(args: string) {
       dropsMap.set(Item.get(itemStr), obj[itemStr!]);
     }
     sendKmail(player, 'Hobopolis consumable drops', dropsMap);
-    myAdventures
+    myAdventures;
   }
 }
