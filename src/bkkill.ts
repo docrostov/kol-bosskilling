@@ -2,6 +2,8 @@ import {
   availableAmount,
   cliExecute,
   equip,
+  familiarWeight,
+  haveEquipped,
   myAdventures,
   numericModifier,
   print,
@@ -12,6 +14,7 @@ import {
   use,
   useFamiliar,
   visitUrl,
+  weightAdjustment,
 } from 'kolmafia';
 import {
   $familiar,
@@ -24,7 +27,9 @@ import {
   $slots,
   Clan,
   get,
+  getModifier,
   have,
+  Kmail,
   property,
   set,
 } from 'libram';
@@ -204,6 +209,18 @@ function kill(location: Location) {
     if (hoboLocation.boss == otoscopeBoss) {
       equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     }
+    if (hoboLocation.boss === $monster`Oscus`) {
+      useFamiliar($familiar`smiling rat`);
+      Kmail.send(
+        1515124,
+        `Hey, I'm about to kill ${hoboLocation.boss}, I'm ${
+          haveEquipped($item`Lil' Doctor™ bag`) ? '' : 'not '
+        } going to use an otoscope, my familiar is ${
+          familiarWeight($familiar`Vampire Vintner`) + weightAdjustment()
+        } lbs, I have ${getModifier('Item Drop')} Item Drop and ${getModifier('Booze Drop')} Booze Drop.`
+      );
+      useFamiliar($familiar`Vampire Vintner`);
+    }
     let initialAdventureCount = myAdventures();
     setChoice(hoboLocation.choiceAdventure, 1);
     let bossMacro = Macro.if_(
@@ -215,12 +232,22 @@ function kill(location: Location) {
       .item($item`Louder Than Bomb`)
       .abort();
 
+    const startingLoot = availableAmount($item`Jar of Fermented Pickle Juice`);
+
     turnSafe(
       `Kill ${hoboLocation.boss}`,
       () => status(location) == HoboStatus.BossReady,
       () => adventureMacro(location, bossMacro)
     );
 
+    if (hoboLocation.boss === $monster`oscus`) {
+      Kmail.send(
+        1515124,
+        `Hey, just killed ${hoboLocation.boss}, and it turns out I got ${
+          availableAmount($item`jar of fermented pickle juice`) - startingLoot
+        } jars!`
+      );
+    }
     print(`Killed ${hoboLocation.boss}`);
     setChoice(hoboLocation.choiceAdventure, 0);
   }
