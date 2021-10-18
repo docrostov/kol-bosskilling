@@ -262,6 +262,7 @@ function refreshComma() {
 }
 
 export function pickFreeFightFamiliar(simulate: boolean = false, overrideFamiliar: boolean = false) {
+    if (!simulate) useFamiliar($familiar`Unspeakachu`);
     return $familiar`Unspeakachu`;
 }
 
