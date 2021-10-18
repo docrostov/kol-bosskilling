@@ -1,14 +1,30 @@
 {
-  "extends": "./node_modules/gts/",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "libram"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
-    "prettier/prettier": "off",
+    "block-scoped-var": "error",
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "eol-last": "error",
+    "prefer-arrow-callback": "error",
+    "no-trailing-spaces": "error",
+    "prefer-template": "error",
     "sort-imports": [
       "error",
       {
         "ignoreCase": true,
         "ignoreDeclarationSort": true
       }
-    ]
+    ],
+    "node/no-unpublished-import": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "libram/verify-constants": "error"
   },
-  "sourceType": "module"
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  }
 }
