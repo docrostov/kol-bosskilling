@@ -210,7 +210,7 @@ function kill(location: Location) {
       equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     }
     if (hoboLocation.boss === $monster`Oscus`) {
-      useFamiliar($familiar`smiling rat`);
+      useFamiliar($familiar`Unspeakachu`);
       Kmail.send(
         1515124,
         `Hey, I'm about to kill ${hoboLocation.boss}, I'm ${
