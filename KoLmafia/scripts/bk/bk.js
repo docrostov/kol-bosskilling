@@ -21069,7 +21069,7 @@ function kill(location) {
     }
 
     if (hoboLocation.boss === (0,libram__WEBPACK_IMPORTED_MODULE_3__.$monster)(_templateObject38 || (_templateObject38 = _taggedTemplateLiteral(["Oscus"])))) {
-      (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useFamiliar)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$familiar)(_templateObject39 || (_templateObject39 = _taggedTemplateLiteral(["smiling rat"]))));
+      (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useFamiliar)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$familiar)(_templateObject39 || (_templateObject39 = _taggedTemplateLiteral(["Unspeakachu"]))));
       libram__WEBPACK_IMPORTED_MODULE_3__.Kmail.send(1515124, "Hey, I'm about to kill ".concat(hoboLocation.boss, ", I'm ").concat((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.haveEquipped)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject40 || (_templateObject40 = _taggedTemplateLiteral(["Lil' Doctor\u2122 bag"])))) ? '' : 'not ', " going to use an otoscope, my familiar is ").concat((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.familiarWeight)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$familiar)(_templateObject41 || (_templateObject41 = _taggedTemplateLiteral(["Vampire Vintner"])))) + (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.weightAdjustment)(), " lbs, I have ").concat((0,libram__WEBPACK_IMPORTED_MODULE_3__.getModifier)('Item Drop'), " Item Drop and ").concat((0,libram__WEBPACK_IMPORTED_MODULE_3__.getModifier)('Booze Drop'), " Booze Drop."));
       (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useFamiliar)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$familiar)(_templateObject42 || (_templateObject42 = _taggedTemplateLiteral(["Vampire Vintner"]))));
     }
