@@ -19,7 +19,7 @@ import { main as sewerMain } from './sewers';
 import { main as dailyMain } from './bkdaily';
 import { main as dietMain } from './bkdiet';
 import { buffsBelowThreshold, sendKmail, Table, time } from './lib';
-import { get, set, property, $item } from 'libram';
+import { get, set, property, $item, Kmail } from 'libram';
 
 function help() {
   print('bk [mode] [mode args]');
@@ -164,10 +164,17 @@ function kmail() {
 }
 
 export function main(args: string) {
-  if (!args || args.length == 0) {
+  if (!args || args.length === 0) {
     print("run 'bk help' for help");
   } else {
     time(() => {
+      Kmail.inbox().forEach((kmail) => {
+        Kmail.send(kmail.senderId, `On 27 October 2021, TPTB released a silent update capping drops from Hobopolis bosses at 10 each. As a result, Phillanthropist is immediately ceasing all bosskilling operation. We hope to be able to use this account and these resources for further endeavors, but whatever your message here is, we cannot help you. If you have an idea for a way to use Phillanthropist's substantial buffs for the betterment of the community, contact DocRostov#7004 on Discord. Any messages you send here will not be read, and will be deleted.
+
+        So long, and thanks for all the schnapps
+        --Phillanthropist (and the operators thereof)`);
+        kmail.delete();
+      });
       let matchedArgs = args.match(RegExp(/(\w+) ?(.*)/));
       if (matchedArgs) {
         let mode = matchedArgs[1].trim();
